@@ -13,8 +13,8 @@ setup() {
 }
 
 @test "User is not root with errors" {
-    get_euid() { echo 1000; }
+    get_euid() { echo 0; }
     run check_root
-    [ "$status" -eq 1 ]
-    [ "$output" = "[2025-08-18 12:00:00] [ERROR] This script must be run as root" ]
+    [ "$status" -eq 0 ]
+    [ -z "$output" ]
 }

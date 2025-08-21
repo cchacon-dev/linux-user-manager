@@ -1,5 +1,8 @@
 #!/bin/bash
 
+set -euo pipefail
+IFS=$'\n\t'
+
 # log LEVEL MESSAGE
 # Prints a log message with a timestamp.
 # LEVEL: INFO, DEBUG, WARN, ERROR
