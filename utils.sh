@@ -61,12 +61,24 @@ get_euid() {
     echo "$EUID"
 }
 
-# Get the username from user
-# return the username
-get_username(){
-    local username="$1"
-    if [[ -z "$username" ]]; then
-        read -r -p "Please enter username: " username
+get_username() {
+    local username="${1:-}"
+    if [[ -n "$username" ]]; then
+        echo "$username"
+        return
     fi
+    read -r -p "Please enter username: " username
     echo "$username"
+}
+
+get_password() {
+    local password="${1:-}"
+    if [[ -n "$password" ]]; then
+        echo "$password"
+        return
+    fi
+    read -r -s -p "Please enter password: " password
+    echo
+    echo "$password"
+
 }

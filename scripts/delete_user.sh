@@ -18,9 +18,9 @@ check_username_exist() {
 
 delete_user() {
     local username
-    username="$(get_username "$1")"
+    username="$(get_username)"
     check_username_exist "$username" || return 1
-    if "$USERDEL_BIN" -m -g users "$username"; then
+    if "$USERDEL_BIN" -r "$username"; then
         log INFO "User $username deleted"
     else
         log ERROR "Failed to delete user $username"
