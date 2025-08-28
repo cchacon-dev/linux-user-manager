@@ -16,12 +16,12 @@ check_username_exist() {
     fi
 }
 
-get_username(){
-    local username="$1"
-    if [[ -z "$username" ]]; then
-        read -r -p "Please enter username: " username
+get_password(){
+    local password="$1"
+    if [[ -z "$password" ]]; then
+        read -r -p -s "Please enter a strong password: " password
     fi
-    echo "$username"
+    echo "$password"
 }
 
 create_user() {

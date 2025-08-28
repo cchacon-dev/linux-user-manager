@@ -60,3 +60,13 @@ user_exists() {
 get_euid() {
     echo "$EUID"
 }
+
+# Get the username from user
+# return the username
+get_username(){
+    local username="$1"
+    if [[ -z "$username" ]]; then
+        read -r -p "Please enter username: " username
+    fi
+    echo "$username"
+}

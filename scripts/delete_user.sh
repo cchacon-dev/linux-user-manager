@@ -16,14 +16,6 @@ check_username_exist() {
     fi
 }
 
-get_username(){
-    local username="$1"
-    if [[ -z "$username" ]]; then
-        read -r -p "Please enter username: " username
-    fi
-    echo "$username"
-}
-
 delete_user() {
     local username
     username="$(get_username "$1")"
