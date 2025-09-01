@@ -16,32 +16,11 @@ check_username_exist() {
         return 1
     fi
 }
-
-create_user() {
-    local username="${1:-}"
-    local password="${2:-}"
-    if [[ -z "$username" ]]; then
-        username="$(get_username)"
-    fi
-    check_username_exist "$username" || return 1
-    if "$USERADD_BIN" -m -g users "$username"; then
-        log INFO "User $username created"
-        
-    else
-        log ERROR "Failed to create user $username"
-        return 1
-    fi
-    set_password "$username"
-}
-
 set_password(){
     local username="$1"
     local password="${2:-}"
-    if [[ -z "$password" ]]; then
-        password=$(echo -n "$(get_password)"| tr -d '\r\n')
-    fi
-    if echo "$username:$password" | "$CHPASSWD_BIN"; then
-        
+
+    if printf  "%s:%s\n" "$username" "$password" | "$CHPASSWD_BIN"; then
         log INFO "Password for User $username created"
     else 
         log ERROR "Failed to create password for user $username"
@@ -49,9 +28,33 @@ set_password(){
     fi
 }
 
+create_user() {
+    local username="${1:-}"
+    local password="${2:-}"
+
+    check_username_exist "$username" || return 1
+    if "$USERADD_BIN" -m -g users "$username"; then
+        log INFO "User $username created"
+    else
+        log ERROR "Failed to create user $username"
+        return 1
+    fi
+    set_password "$username" "$password"
+}
+
 main() {
     check_root || return 1
-    create_user "$@"
+
+    local username="${1:-}"
+    local password="${2:-}"
+
+    if [[ -z "$username" ]]; then
+        username="$(get_username)"
+    fi
+    if [[ -z "$password" ]]; then
+        password=$("$(get_password)"| tr -d '\r\n')
+    fi
+    create_user "$username" "$password"
 }
 
 if [[ "${BASH_SOURCE[0]}" == "${0}" ]]; then

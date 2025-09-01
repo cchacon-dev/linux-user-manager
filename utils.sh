@@ -77,7 +77,7 @@ get_password() {
         echo "$password"
         return
     fi
-    read -r -s -p "Please enter password: " password
+    read -rs -p "Please enter password: " password
     echo
     echo "$password"
 

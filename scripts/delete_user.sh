@@ -17,8 +17,7 @@ check_username_exist() {
 }
 
 delete_user() {
-    local username
-    username="$(get_username)"
+    local username="${1:-}"
     check_username_exist "$username" || return 1
     if "$USERDEL_BIN" -r "$username"; then
         log INFO "User $username deleted"
@@ -30,7 +29,12 @@ delete_user() {
 
 main() {
     check_root || return 1
-    delete_user "$@"
+
+		local username="${1:-}"
+    if [[ -z "$username" ]]; then
+        username="$(get_username)"
+    fi
+    delete_user "$username"
 }
 
 if [[ "${BASH_SOURCE[0]}" == "${0}" ]]; then
