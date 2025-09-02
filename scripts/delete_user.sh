@@ -9,34 +9,34 @@ source "$SCRIPT_DIR/../utils.sh"
 : "${USERDEL_BIN:=/usr/sbin/userdel}"
 
 check_username_exist() {
-    local username="$1"
-    if ! user_exists "$username"; then
-        log ERROR "User $username not found"
-        return 1
-    fi
+  local username="$1"
+  if ! user_exists "$username"; then
+    log ERROR "User $username not found"
+    return 1
+  fi
 }
 
 delete_user() {
-    local username="${1:-}"
-    check_username_exist "$username" || return 1
-    if "$USERDEL_BIN" -r "$username"; then
-        log INFO "User $username deleted"
-    else
-        log ERROR "Failed to delete user $username"
-        return 1
-    fi
+  local username="${1:-}"
+  check_username_exist "$username" || return 1
+  if "$USERDEL_BIN" -r "$username"; then
+    log INFO "User $username deleted"
+  else
+    log ERROR "Failed to delete user $username"
+    return 1
+  fi
 }
 
 main() {
-    check_root || return 1
+  check_root || return 1
 
-		local username="${1:-}"
-    if [[ -z "$username" ]]; then
-        username="$(get_username)"
-    fi
-    delete_user "$username"
+  local username="${1:-}"
+  if [[ -z "$username" ]]; then
+    username="$(get_username)"
+  fi
+  delete_user "$username"
 }
 
 if [[ "${BASH_SOURCE[0]}" == "${0}" ]]; then
-    main "$@"
+  main "$@"
 fi

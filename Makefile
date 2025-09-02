@@ -1,12 +1,31 @@
-# Directories
-TEST_DIR := tests
+BATS      ?= bats
+TEST_DIR  := tests
 
-# Run all Bats tests
+SCRIPTS   := $(wildcard scripts/*.sh) $(wildcard utils.sh)
+
+.PHONY: test
 test:
-	bats $(TEST_DIR)
+	$(BATS) $(TEST_DIR)
 
-# Run a specific test file (example: test_log.bats)
-test-log:
-	bats $(TEST_DIR)/test_log.bats
+test-%: $(TEST_DIR)/%.bats
+	$(BATS) $<
 
-.PHONY: test test-log
+.PHONY: fmt
+fmt:
+	shfmt -i 2 -ci -sr -w $(SCRIPTS)
+
+.PHONY: fmt-check
+fmt-check:
+	shfmt -i 2 -ci -sr -d $(SCRIPTS)
+
+.PHONY: lint
+lint:
+	shellcheck -x -P SCRIPTDIR $(SCRIPTS)
+
+help:
+	@echo "Available targets:"
+	@echo "  make test        - Run all Bats tests"
+	@echo "  make test-<name> - Run a specific test file (without .bats extension)"
+	@echo "  make fmt         - Format shell scripts with shfmt"
+	@echo "  make fmt-check   - Verify formatting (no changes)"
+	@echo "  make lint        - Lint scripts with ShellCheck"
